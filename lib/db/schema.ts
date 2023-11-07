@@ -2,6 +2,7 @@ import { pgTable, serial, text, timestamp, } from 'drizzle-orm/pg-core'
 
 export const boards = pgTable("boards", {
   id: serial("id").primaryKey(),
+  userId: text("userId").notNull(),
   board_name: text("board_name").notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 });
