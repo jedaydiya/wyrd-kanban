@@ -1,10 +1,10 @@
-import { UserButton } from "@clerk/nextjs"
-import { User } from "lucide-react"
+import Navbar from "@/components/navbar"
 export default function Home() {
   return (
     <>
-      <UserButton afterSignOutUrl="/" />
-      <div className='text-red-300'>wyrd-kanban</div>
+      <div className="px-4 py-3 bg-slate-900">
+        <Navbar />
+      </div>
     </>
   )
 }
