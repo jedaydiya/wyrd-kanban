@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import { db } from "@/lib/db";
 import { boards } from "@/lib/db/schema";
@@ -11,18 +11,21 @@ export async function createNewBoard(newBoard: unknown) {
   if (!result.success) {
     let errorMessage = "";
     result.error.issues.forEach((issue) => {
-      errorMessage =
-        errorMessage + issue.path[0] + ": " + issue.message + ". ";
+      errorMessage = errorMessage + issue.path[0] + ": " + issue.message + ". ";
     });
 
     return {
       error: errorMessage,
-    }
+    };
   }
   const { userId }: { userId: string | null } = auth();
 
-  await db.insert(boards).values({ board_name: result.data.name as string, userId: userId as string });
+  await db
+    .insert(boards)
+    .values({
+      board_name: result.data.name as string,
+      userId: userId as string,
+    });
 
-  revalidatePath('/')
-
+  revalidatePath("/");
 }
