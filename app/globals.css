@@ -2,12 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 html,body {
-  background-color: #0f172a;
   height:100%;
 }
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 137 17% 8%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -16,16 +15,16 @@ html,body {
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222 61% 36%;
+    --primary: 135 18% 34%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 223 61% 8%;
+    --secondary: 134 18% 14%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 222 61% 8%;
+    --accent: 134 18% 54%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
