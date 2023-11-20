@@ -10,7 +10,9 @@ import {
 
 import { formatDistance } from "date-fns";
 import { Button } from "./ui/button";
-import { deleteBoard } from "@/server-actions/actions";
+import { Trash2, MoveRight, AlertTriangleIcon } from "lucide-react";
+import CreateBoardDialog from "./CreateBoardDialog";
+import { createBoard } from "@/server-actions/create-board-action";
 export default async function BoardList() {
   const boards = await fetchBoards();
   return (
@@ -19,7 +21,7 @@ export default async function BoardList() {
         {boards?.map((board) => (
           <Card className="h-[190px] rounded-md border-none bg-background text-white shadow-md shadow-accent">
             <CardHeader>
-              <CardTitle>{board.board_name}</CardTitle>
+              <CardTitle key={board.id}>{board.board_name}</CardTitle>
               <CardDescription className="text-white/80">
                 {formatDistance(board.createdAt, new Date(), {
                   addSuffix: true,
@@ -29,23 +31,15 @@ export default async function BoardList() {
             <CardContent className="h-[20px] truncate text-sm text-muted-foreground">
               {board.board_description || "No Description"}
             </CardContent>
-            <CardFooter className="flex gap-2">
-              <Button variant="outline" className="text-md mt-2 w-full gap-4">
+            <CardFooter>
+              <Button className="text-md mt-2 w-full gap-4 border-2 border-black bg-slate-100 text-lg text-black hover:bg-white/90">
                 View
+                <MoveRight className="h-6 w-6" />
               </Button>
-              <form action={deleteBoard} className="w-full">
-                <input type="hidden" name="boardId" value={board.id} />
-                <Button
-                  type="submit"
-                  variant="outline"
-                  className="text-md mt-2 w-full gap-4"
-                >
-                  Delete
-                </Button>
-              </form>
             </CardFooter>
           </Card>
         ))}
+        <CreateBoardDialog createBoard={createBoard} />
       </div>
     </>
   );
