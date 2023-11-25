@@ -20,10 +20,16 @@ const schema = z.object({
 
 export const createBoard = action(schema, async ({ name, description }) => {
   const { userId }: { userId: string | null } = auth();
-  await db.insert(boards).values({
-    board_name: name as string,
-    board_description: description as string,
-    userId: userId as string,
-  });
+  const result = await db
+    .insert(boards)
+    .values({
+      board_name: name as string,
+      board_description: description as string,
+      userId: userId as string,
+    })
+    .returning({ insertedId: boards.id });
+
+  const insertedId = result[0]?.insertedId;
   revalidatePath("/boards");
+  return { data: insertedId };
 });

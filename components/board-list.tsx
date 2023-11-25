@@ -7,9 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { formatDistance } from "date-fns";
 import { Button } from "./ui/button";
+import Link from 'next/link';
 import { Trash2, MoveRight, AlertTriangleIcon } from "lucide-react";
 import CreateBoardDialog from "./CreateBoardDialog";
 import { createBoard } from "@/server-actions/create-board-action";
@@ -32,9 +32,13 @@ export default async function BoardList() {
               {board.board_description || "No Description"}
             </CardContent>
             <CardFooter>
-              <Button className="text-md mt-2 w-full gap-4 border-2 border-black bg-slate-100 text-lg text-black hover:bg-white/90">
-                View
-                <MoveRight className="h-6 w-6" />
+              <Button
+                asChild
+                className="text-md mt-2 w-full gap-4 border-2 border-black bg-slate-100 text-lg text-black hover:bg-white/90"
+              >
+                <Link href={`/boards/${board.id}`}>View
+                  <MoveRight className="h-6 w-6" />
+                </Link>
               </Button>
             </CardFooter>
           </Card>

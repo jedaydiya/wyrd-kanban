@@ -5,11 +5,13 @@ export default function Navigation() {
   return (
     <>
       <Toaster expand={true} richColors />
-      <div className="justify between mx-auto flex max-w-7xl items-center">
-        <Box size={48} className="mr-2 text-white" />
-        <p className="text-xl text-white">wyrd-kanban</p>
-        <div className="ml-auto flex items-center gap-4 ">
-          <UserButton afterSignOutUrl="/" />
+      <div className="border-b border-dotted border-slate-200 py-2">
+        <div className="justify  between mx-auto flex max-w-7xl items-center">
+          <Box size={48} className="mr-2 text-white" />
+          <p className="text-xl text-white">wyrd-kanban</p>
+          <div className="ml-auto flex items-center gap-4 ">
+            <UserButton afterSignOutUrl="/" />
+          </div>
         </div>
       </div>
     </>

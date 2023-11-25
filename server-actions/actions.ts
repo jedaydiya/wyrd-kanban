@@ -7,7 +7,10 @@ import { eq, type InferSelectModel } from "drizzle-orm";
 export type SelectBoard = InferSelectModel<typeof boards>;
 export async function fetchBoards() {
   try {
-    const boardResults: SelectBoard[] = await db.select().from(boards);
+    const boardResults: SelectBoard[] = await db
+      .select()
+      .from(boards)
+      .orderBy(boards.createdAt);
     return boardResults;
   } catch (err) {
     if (err instanceof Error) console.log(err.stack);

@@ -17,15 +17,19 @@ import { createBoard } from "@/server-actions/create-board-action";
 import { useAction } from "next-safe-action/hook";
 import { useRef, ElementRef } from "react";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 type Props = {
   createBoard: typeof createBoard;
 };
 const CreateBoardDialog = ({ createBoard }: Props) => {
   const closeRef = useRef<ElementRef<"button">>(null);
+  const router = useRouter();
+
   const { execute, result, status } = useAction(createBoard, {
     onSuccess(data, result) {
       toast.success("The " + result.name + " board has been created");
       closeRef.current?.click();
+      router.push(`/boards/${data.data}`);
     },
     onError(error) {
       if (error.validationError && error.validationError.name) {
