@@ -18,7 +18,7 @@ const BoardTitle = ({ data, updateBoard }: BoardTitleProps) => {
   const [title, setTitle] = useState(data.board_name);
   const [isEditing, setIsEditing] = useState(false);
 
-  const { execute, result, status } = useAction(updateBoard, {
+  const { execute } = useAction(updateBoard, {
     onSuccess(data, result) {
       toast.success("Board has been renamed to " + result.name);
       setTitle(result.name);
