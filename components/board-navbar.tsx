@@ -5,7 +5,7 @@ import BoardTitle from "./board-title";
 import { BoardOptions } from "./board-options";
 import { updateBoard } from "@/server-actions/update-board-action";
 export interface Board {
-  id: string;
+  id: number;
   userId: string;
   board_name: string;
   board_description?: string | null;

@@ -20,7 +20,7 @@ export const updateBoard = action(schema, async ({ id, name }) => {
   if (!userId) {
     return {
       error: "Unauthorized",
-    }
+    };
   }
   const updatedBoard = await db
     .update(boards)
