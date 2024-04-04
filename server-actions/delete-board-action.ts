@@ -11,12 +11,6 @@ const schema = z.object({
   id: z.number(),
 });
 export const deleteBoard = action(schema, async ({ id }) => {
-  const { userId }: { userId: string | null } = auth();
-  if (!userId) {
-    return {
-      error: "Unauthorized",
-    };
-  }
   await db.delete(boards).where(eq(boards.id, id as number));
   revalidatePath("/boards");
   redirect("/boards");

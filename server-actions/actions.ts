@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { boards, lists } from "@/lib/db/schema";
+import { desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { eq, type InferSelectModel } from "drizzle-orm";
 export type SelectBoard = InferSelectModel<typeof boards>;
@@ -11,7 +12,7 @@ export async function fetchBoards() {
     const boardResults: SelectBoard[] = await db
       .select()
       .from(boards)
-      .orderBy(boards.createdAt);
+      .orderBy(desc(boards.createdAt));
     return boardResults;
   } catch (err) {
     if (err instanceof Error) console.log(err.stack);
@@ -29,4 +30,3 @@ export async function fetchList() {
     if (err instanceof Error) console.log(err.stack);
   }
 }
-

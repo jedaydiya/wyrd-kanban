@@ -14,8 +14,9 @@ export const lists = pgTable("lists", {
   order: integer("order").notNull(),
   description: text("description"),
 
-  board_id: integer("board_id").references(() => boards.id),
-
+  board_id: integer("board_id").references(() => boards.id, {
+    onDelete: "cascade",
+  }),
 
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull(),

@@ -20,7 +20,6 @@ interface Board {
   board_name: string;
   board_description?: string | null;
   createdAt: Date;
-  // Add other properties as needed
 }
 
 interface DeleteBoardDialogProps extends Props {
@@ -31,7 +30,7 @@ export const DeleteDialog = ({
   deleteBoard,
 }: DeleteBoardDialogProps) => {
   const { execute, result } = useAction(deleteBoard, {
-    onSuccess(data, result) {
+    onSuccess(data) {
       toast.success("Board has been deleted");
     },
     onError(error) {
