@@ -21,6 +21,7 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
 
   useEffect(() => {
     setOrderedData(data);
+    console.log("Gumana ang useEffect");
   }, [data]);
   return (
     <>

@@ -6,6 +6,7 @@ import { FormInput } from "./form/form-input";
 import { useAction } from "next-safe-action/hook";
 import { updateList } from "@/server-actions/update-list-action";
 import { toast } from "sonner";
+import { ListOptions } from "./list-options";
 interface ListHeaderProps {
   data: ListProps[];
 }
@@ -27,11 +28,11 @@ export const ListHeader = ({ data }: ListHeaderProps) => {
   const disableEditing = () => {
     setIsEditing(false);
   };
-  const { execute } = useAction(updateList, {
-    onSuccess(data, result) {
-      toast.success("List name has been updated to " + result.name);
-      console.log(result);
-      setTitle(result.name);
+  const { execute, reset } = useAction(updateList, {
+    onSuccess(data) {
+      setTitle(data);
+      toast.success("Renamed list to " + data);
+      reset();
       disableEditing();
     },
     onError(error) {
@@ -48,6 +49,10 @@ export const ListHeader = ({ data }: ListHeaderProps) => {
       id: id,
       boardId: boardId,
     };
+
+    if (title === data.name) {
+      return disableEditing();
+    }
     execute(data);
   };
 
@@ -91,6 +96,7 @@ export const ListHeader = ({ data }: ListHeaderProps) => {
             {title}
           </div>
         )}
+        <ListOptions onAddCard={() => {}} data={data} />
       </div>
     </div>
   );

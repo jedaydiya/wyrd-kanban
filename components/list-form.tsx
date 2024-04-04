@@ -17,6 +17,7 @@ export const ListForm = () => {
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
   const enableEditing = () => {
     setIsEditing(true);
@@ -30,6 +31,8 @@ export const ListForm = () => {
   };
   const { execute } = useAction(createList, {
     onSuccess(data, result) {
+      setIsCreating(false);
+      console.log(data);
       toast.success("List " + result.title + " has been created");
       disableEditing();
       router.refresh();
@@ -44,10 +47,10 @@ export const ListForm = () => {
     const data = {
       title: formData.get("title") as string,
       boardId: boardId,
-    }
+    };
+    setIsCreating(true);
     execute(data);
-  }
-
+  };
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
@@ -75,7 +78,12 @@ export const ListForm = () => {
           <input hidden value={params.boardId} name="boardId" />
           <div className="flex items-center gap-x-1">
             <FormSubmit className="bg-accent">Add List</FormSubmit>
-            <Button onClick={disableEditing} size="sm" variant="ghost" className="hover:bg-slate-100">
+            <Button
+              onClick={disableEditing}
+              size="sm"
+              variant="ghost"
+              className="hover:bg-slate-100"
+            >
               <X className="h-5 w-5" />
             </Button>
           </div>

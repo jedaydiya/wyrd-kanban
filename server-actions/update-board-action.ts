@@ -16,12 +16,12 @@ const schema = z.object({
 });
 
 export const updateBoard = action(schema, async ({ id, name }) => {
-  const { userId }: { userId: string | null } = auth();
-  if (!userId) {
-    return {
-      error: "Unauthorized",
-    };
-  }
+  // const { userId }: { userId: string | null } = auth();
+  // if (!userId) {
+  // return {
+  // error: "Unauthorized",
+  // };
+  // }
   const updatedBoard = await db
     .update(boards)
     .set({ board_name: name as string })
@@ -30,5 +30,5 @@ export const updateBoard = action(schema, async ({ id, name }) => {
 
   const newBoardname = updatedBoard[0]?.newBoardname;
   revalidatePath(`/boards/${id}`);
-  return { data: newBoardname };
+  return newBoardname;
 });

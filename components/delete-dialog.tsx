@@ -15,7 +15,7 @@ type Props = {
   deleteBoard: typeof deleteBoard;
 };
 interface Board {
-  id: string;
+  id: number;
   userId: string;
   board_name: string;
   board_description?: string | null;

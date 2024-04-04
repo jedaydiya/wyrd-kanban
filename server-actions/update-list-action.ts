@@ -16,13 +16,8 @@ const schema = z.object({
   boardId: z.number(),
 });
 export const updateList = action(schema, async ({ id, name, boardId }) => {
-  const { userId }: { userId: string | null } = auth();
-  if (!userId) {
-    return {
-      error: "Unauthorized",
-    };
-  }
-
+  // const { userId }: { userId: string | null } = auth();
+  //}
   const updatedList = await db
     .update(lists)
     .set({ title: name as string })
@@ -33,5 +28,5 @@ export const updateList = action(schema, async ({ id, name, boardId }) => {
 
   const newListname = updatedList[0]?.newListname;
   revalidatePath(`/boards/${id}`);
-  return { data: newListname };
+  return newListname;
 });

@@ -25,7 +25,7 @@ export const createList = action(schema, async ({ boardId, title }) => {
   }
   try {
     const board = await db.query.boards.findFirst({
-      where: eq(boards.id, boardId)
+      where: eq(boards.id, boardId),
     });
     if (!board) {
       return {
@@ -37,26 +37,21 @@ export const createList = action(schema, async ({ boardId, title }) => {
       orderBy: (lists, { desc }) => [desc(lists.order)],
       columns: {
         order: true,
-      }
+      },
     });
 
     const newOrder = lastList ? lastList.order + 1 : 1;
 
-    await db
-      .insert(lists)
-      .values({
-        title: title as string,
-        board_id: boardId as number,
-        order: newOrder,
-        updatedAt: new Date(),
-      })
-
-
-  }
-  catch (error) {
+    await db.insert(lists).values({
+      title: title as string,
+      board_id: boardId as number,
+      order: newOrder,
+      updatedAt: new Date(),
+    });
+  } catch (error) {
     return {
-      error: "Failed to create."
-    }
+      error: "Failed to create.",
+    };
   }
   revalidatePath(`/boards/${boardId}`);
 });
