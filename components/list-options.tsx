@@ -11,11 +11,35 @@ import {
 import { Button } from "./ui/button";
 import { MoreHorizontal, X } from "lucide-react";
 import { FormSubmit } from "./form/form-submit";
+import { useAction } from "next-safe-action/hook";
+import { deleteList } from "@/server-actions/delete-list-action";
+import { toast } from "sonner";
 interface ListOptionsProps {
-  data: ListProps;
-  onAddCard: () => void;
+  data: ListProps[];
+  // onAddCard: () => void;
 }
-export const ListOptions = ({ data, onAddCard }: ListOptionsProps) => {
+export const ListOptions = ({ data }: ListOptionsProps) => {
+  const { execute, reset } = useAction(deleteList, {
+    onSuccess(data) {
+      toast.success("List " + data + " has been deleted");
+      reset();
+    },
+    onError(error) {
+      toast.error("Delete failed: " + error.fetchError);
+      console.log(error);
+    },
+  });
+
+  const onDelete = (formData: FormData) => {
+    const id = parseInt(formData.get("id") as string);
+    const boardId = parseInt(formData.get("boardId") as string);
+    const data = {
+      id: id,
+      boardId: boardId,
+    };
+    console.log(data);
+    execute(data);
+  };
   return (
     <Popover>
       <PopoverTrigger className="bg-transparent hover:bg-slate-300" asChild>
@@ -35,16 +59,16 @@ export const ListOptions = ({ data, onAddCard }: ListOptionsProps) => {
             <X className="h-4 w-4" />
           </Button>
         </PopoverClose>
-        <Button
-          onClick={onAddCard}
-          className="h-auto w-full justify-start rounded-none bg-white p-2 px-5 text-sm font-normal hover:bg-slate-100"
-          variant="ghost"
-        >
-          Add Card...
-        </Button>
+        {/* <Button */}
+        {/*   onClick={onAddCard} */}
+        {/*   className="h-auto w-full justify-start rounded-none bg-white p-2 px-5 text-sm font-normal hover:bg-slate-100" */}
+        {/*   variant="ghost" */}
+        {/* > */}
+        {/*   Add Card... */}
+        {/* </Button> */}
         <form>
-          <input hidden name="id" id="id" value={data.id} />
-          <input hidden name="boardId" id="boardId" value={data.board_id} />
+          <input hidden name="id" id="id" value={data[0].id} />
+          <input hidden name="boardId" id="boardId" value={data[0].board_id} />
           <FormSubmit
             className="h-auto w-full justify-start rounded-none bg-white p-2 px-5 text-sm font-normal text-black hover:bg-slate-100"
             variant="ghost"
@@ -53,9 +77,9 @@ export const ListOptions = ({ data, onAddCard }: ListOptionsProps) => {
           </FormSubmit>
         </form>
         <Separator />
-        <form>
-          <input hidden name="id" id="id" value={data.id} />
-          <input hidden name="boardid" id="boardid" value={data.board_id} />
+        <form action={onDelete}>
+          <input hidden name="id" id="id" value={data[0].id} />
+          <input hidden name="boardId" id="boardId" value={data[0].board_id} />
           <FormSubmit
             variant="ghost"
             className="h-auto w-full justify-start rounded-none bg-white p-2 px-5 text-sm font-normal text-black hover:bg-slate-100"
