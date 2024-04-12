@@ -26,10 +26,8 @@ const CreateBoardDialog = ({ createBoard }: Props) => {
   const router = useRouter();
 
   const { execute, result, status } = useAction(createBoard, {
-    onSuccess(data, result) {
-      toast.success("The " + result.name + " board has been created");
+    onSuccess() {
       closeRef.current?.click();
-      router.push(`/boards/${data.data}`);
     },
     onError(error) {
       if (error.validationError && error.validationError.name) {

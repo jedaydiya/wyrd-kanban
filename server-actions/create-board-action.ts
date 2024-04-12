@@ -4,6 +4,7 @@ import { action } from "@/lib/safe-action";
 import { db } from "@/lib/db";
 import { boards } from "@/lib/db/schema";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 const schema = z.object({
   id: z.number().optional(),
@@ -31,5 +32,8 @@ export const createBoard = action(schema, async ({ name, description }) => {
 
   const insertedId = result[0]?.insertedId;
   revalidatePath("/boards");
-  return { data: insertedId };
+  redirect(`/boards/${insertedId}`);
+  // return {
+  //   data: insertedId,
+  // };
 });
