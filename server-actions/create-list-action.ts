@@ -42,16 +42,19 @@ export const createList = action(schema, async ({ boardId, title }) => {
 
     const newOrder = lastList ? lastList.order + 1 : 1;
 
-    await db.insert(lists).values({
+    const newList = await db.insert(lists).values({
       title: title as string,
       board_id: boardId as number,
       order: newOrder,
       updatedAt: new Date(),
     });
+    revalidatePath(`/boards/${boardId}`);
+    return {
+      name: title as string,
+    };
   } catch (error) {
     return {
       error: "Failed to create.",
     };
   }
-  revalidatePath(`/boards/${boardId}`);
 });

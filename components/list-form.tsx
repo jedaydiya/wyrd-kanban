@@ -12,7 +12,6 @@ import { FormSubmit } from "./form/form-submit";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 export const ListForm = () => {
-  const router = useRouter();
   const params = useParams();
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
@@ -29,16 +28,16 @@ export const ListForm = () => {
   const disableEditing = () => {
     setIsEditing(false);
   };
-  const { execute } = useAction(createList, {
-    onSuccess(data, result) {
+  const { execute, reset } = useAction(createList, {
+    onSuccess(data) {
       setIsCreating(false);
-      console.log(data);
-      toast.success("List " + result.title + " has been created");
+      toast.success("List " + data.name + " has been created");
+      reset();
       disableEditing();
-      router.refresh();
     },
     onError(error) {
       toast.error("Update failed: " + error);
+      console.log(error);
     },
   });
 
