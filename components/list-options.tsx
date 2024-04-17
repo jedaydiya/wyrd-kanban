@@ -13,19 +13,35 @@ import { MoreHorizontal, X } from "lucide-react";
 import { FormSubmit } from "./form/form-submit";
 import { useAction } from "next-safe-action/hook";
 import { deleteList } from "@/server-actions/delete-list-action";
+import { copyList } from "@/server-actions/copy-list-action";
 import { toast } from "sonner";
+import { ElementRef, useRef } from "react";
 interface ListOptionsProps {
   data: ListProps[];
   // onAddCard: () => void;
 }
 export const ListOptions = ({ data }: ListOptionsProps) => {
+  const closeRef = useRef<ElementRef<"button">>(null);
   const { execute, reset } = useAction(deleteList, {
     onSuccess(data) {
       toast.success("List " + data + " has been deleted");
+      closeRef.current?.click();
       reset();
     },
     onError(error) {
       toast.error("Delete failed: " + error.fetchError);
+      console.log(error);
+    },
+  });
+  const { execute: copyExecute, reset: copyReset } = useAction(copyList, {
+    onSuccess(data) {
+      console.log(data);
+      toast.success("List " + data.name + " copied");
+      closeRef.current?.click();
+      copyReset();
+    },
+    onError(error) {
+      toast.error("Delete failed: " + error.serverError);
       console.log(error);
     },
   });
@@ -37,9 +53,19 @@ export const ListOptions = ({ data }: ListOptionsProps) => {
       id: id,
       boardId: boardId,
     };
-    console.log(data);
     execute(data);
   };
+
+  const onCopy = (formData: FormData) => {
+    const id = parseInt(formData.get("id") as string);
+    const boardId = parseInt(formData.get("boardId") as string);
+    const data = {
+      id: id,
+      boardId: boardId,
+    };
+    copyExecute(data);
+  };
+
   return (
     <Popover>
       <PopoverTrigger className="bg-transparent hover:bg-slate-300" asChild>
@@ -51,7 +77,7 @@ export const ListOptions = ({ data }: ListOptionsProps) => {
         <div className="pb-4 text-center text-sm font-medium text-neutral-600">
           List Actions
         </div>
-        <PopoverClose asChild>
+        <PopoverClose ref={closeRef} asChild>
           <Button
             className="absolute right-2 top-2 h-auto w-auto bg-white p-2 text-neutral-600 hover:bg-slate-100"
             variant="ghost"
@@ -66,7 +92,7 @@ export const ListOptions = ({ data }: ListOptionsProps) => {
         {/* > */}
         {/*   Add Card... */}
         {/* </Button> */}
-        <form>
+        <form action={onCopy}>
           <input hidden name="id" id="id" value={data[0].id} />
           <input hidden name="boardId" id="boardId" value={data[0].board_id} />
           <FormSubmit
